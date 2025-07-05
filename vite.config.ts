@@ -2,11 +2,17 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import monkey from 'vite-plugin-monkey';
 import { version } from "./package.json";
+import * as path from "node:path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    minify: true
+    minify: true,
+  },
+  resolve: {
+    alias:  {
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
   plugins: [
     vue(),
