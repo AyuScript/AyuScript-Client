@@ -2,6 +2,7 @@
 import {WebSocketService} from "../websocket.ts";
 import {ref} from "vue";
 import {currentServerInfo} from "../player.ts";
+import {eventBus} from "@/eventBus.ts";
 
 interface OnlinePeoplePacket {
   content: {
@@ -13,7 +14,10 @@ interface OnlinePeoplePacket {
 }
 
 const { webSocketService } = defineProps<{
-  webSocketService: WebSocketService
+  webSocketService: WebSocketService,
+  switcherOptions: {
+    showSwitcher: boolean
+  }
 }>();
 
 const userInfo = ref({
@@ -57,19 +61,23 @@ requestAnimationFrame(update);
           {{webSocketService.isConnected.value ? "Online" : "Offline"}}
         </span>
       </div>
-      <div :class="['detail', {'highlight': currentServerInfo.region == 'US'}]">
+      <div :class="['detail', 'code', {'highlight': currentServerInfo.region == 'US'}]"
+           @click="eventBus.emit('showSwitcher')">
         <span>US</span>
         <span>{{userInfo.us}}</span>
       </div>
-      <div :class="['detail', {'highlight': currentServerInfo.region == 'EU'}]">
+      <div :class="['detail', 'code', {'highlight': currentServerInfo.region == 'EU'}]"
+           @click="eventBus.emit('showSwitcher')">
         <span>EU</span>
         <span>{{userInfo.eu}}</span>
       </div>
-      <div :class="['detail', {'highlight': currentServerInfo.region == 'AS'}]">
+      <div :class="['detail', 'code', {'highlight': currentServerInfo.region == 'AS'}]"
+           @click="eventBus.emit('showSwitcher')">
         <span>AS</span>
         <span>{{userInfo.as}}</span>
       </div>
-      <div class="detail">
+      <div class="detail code"
+           @click="eventBus.emit('showSwitcher')">
         <span>Code</span>
         <span>{{currentServerInfo.serverId}}</span>
       </div>
@@ -108,6 +116,11 @@ requestAnimationFrame(update);
 .detail {
   display: flex;
   flex-direction: column;
+}
+
+.code {
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .highlight {

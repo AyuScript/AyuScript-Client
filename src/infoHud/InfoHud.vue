@@ -8,6 +8,8 @@ import { superNames } from "./super/superNames.ts";
 import SummaryPanel from "./SummaryPanel.vue";
 import {notices} from "./notice/notice.ts";
 import NoticePanel from "./notice/NoticePanel.vue";
+import SwitcherPanel from "@/infoHud/serverSwitcher/SwitcherPanel.vue";
+import {eventBus} from "@/eventBus.ts";
 
 interface SuperPacket {
   content: {
@@ -79,6 +81,11 @@ webSocketService.subscribe('superpingModify', (data: SuperPacket) => {
   superList.value = data.content;
 });
 
+const showSwitcher = ref(false);
+eventBus.on("showSwitcher", ()=>{
+  showSwitcher.value = !showSwitcher.value;
+});
+
 </script>
 
 <template>
@@ -98,7 +105,10 @@ webSocketService.subscribe('superpingModify', (data: SuperPacket) => {
           :content="notice"
       />
     </transition-group>
-    <SummaryPanel :webSocketService="webSocketService"/>
+    <transition name="slide-down">
+      <SwitcherPanel v-show="showSwitcher"/>
+    </transition>
+    <SummaryPanel :webSocketService="webSocketService" :switcherOptions="{ showSwitcher }"/>
   </div>
 </template>
 
@@ -119,5 +129,17 @@ webSocketService.subscribe('superpingModify', (data: SuperPacket) => {
 .slide-fade-leave-to {
   opacity: 0;
   transform: translateX(100%);
+}
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.4s ease;
+}
+.slide-down-enter-from {
+  opacity: 0;
+  transform: translateY(calc(var(--unit) * 0.8));
+}
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(calc(var(--unit) * 0.8));
 }
 </style>

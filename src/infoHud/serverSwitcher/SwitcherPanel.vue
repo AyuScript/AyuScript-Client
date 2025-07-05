@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import {getWsURL} from './gameWebsocket';
-import {currentServerInfo} from "./player.ts";
+import {getWsURL} from '@/gameWebsocket.ts';
+import {currentServerInfo} from "@/player.ts";
+import {eventBus} from "@/eventBus.ts";
 
 const matrixs = [
   'Garden', 'Desert', 'Ocean', 'Jungle', 'Ant Hell', 'Hel', 'Sewers', 'Factory', 'Pyramid'
@@ -18,11 +19,7 @@ const servers = ref(
 );
 
 const totalServers = matrixs.length;
-const position = '-240px';
-const showMenu = ref(false);
 const wssArr = ref<string[]>([]);
-
-const switchServerKey = ref("Backquote");
 
 function regionToName(code: string) {
   return code === 'NA' ? 'US' : code === 'EU' ? 'EU' : code === 'AS' ? 'AS' : code;
@@ -100,80 +97,73 @@ onMounted(() => {
       if (wssArr.value[0] !== wssArr.value[1]) {
         updateServers();
         getServerId();
-        if (showMenu.value) {
-          showMenu.value = true;
-          setTimeout(() => (showMenu.value = false), 3000);
-        }
       }
     }
   }, 1000);
 
   document.addEventListener('keydown', (e) => {
-    if (e.code === switchServerKey.value) {
-      showMenu.value = !showMenu.value;
+    if (e.code === 'Backquote') {
+      eventBus.emit('showSwitcher');
     }
   })
-
-  setTimeout(() => (showMenu.value = false), 3000);
 })
 </script>
 
 <template>
-  <div class="serverSwitcherContainer" :style="{ top: showMenu ? '0px' : position }">
-    <div>
-      {{ $t('serverSwitcher.title.1') }}
-      <br/>
-      {{ $t('serverSwitcher.title.2',{key: switchServerKey}) }}
-      <br/>
-      {{ $t('serverSwitcher.title.3') }}
-    </div>
-
-    <div v-if="currentServerInfo.map !== ''">
-      {{ currentServerInfo.region }} - {{ currentServerInfo.map }}
-      <table style="margin: 0 auto;">
-        <tbody>
-        <tr v-for="(serversByRegion, region) in servers[currentServerInfo.map as Matrix]" :key="region">
-          <td>『 {{ regionToName(region) }} 』</td>
-          <td v-for="serverId in Object.keys(serversByRegion)" :key="serverId" style="min-width: 50px">
-              <span
-                  class="server-id"
-                  :style="{ cursor: 'pointer', color: serverId === currentServerInfo.serverId ? '#29ffa3' : '#ababab' }"
-                  @click="connectToServer(serverId)"
-              >
-                {{ serverId }}
-              </span>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div v-else>
-      {{ $t('serverSwitcher.noInfo') }}
+  <div class="card">
+    <div class="info">
+      <div class="region" v-for="(serversByRegion, region) in servers[currentServerInfo.map as Matrix]" :key="region">
+        <span class="serverId" v-for="serverId in Object.keys(serversByRegion)"
+              :key="serverId"
+              :style="{ cursor: 'pointer', color: serverId === currentServerInfo.serverId ? '#3ef29d' : '#ffffff' }"
+              @click="connectToServer(serverId)">
+          {{ serverId }}
+        </span>
+      </div>
+      <span class="region map">
+        {{ currentServerInfo.map }}
+      </span>
     </div>
   </div>
 </template>
 
-<style>
-.serverSwitcherContainer {
-  width: 500px;
-  height: auto;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 10px;
-  margin: 0 auto;
-  color: white;
-  text-align: center;
-  font-family: Ubuntu, sans-serif;
-  padding: 12px;
-  cursor: default;
-  transition: all 1s ease-in-out
+<style scoped>
+.card {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  border-radius: calc(var(--unit) * 0.6);
+  padding: calc(var(--unit) * 1);
+  width: calc(var(--unit) * 25);
+  margin: calc(var(--unit) * 0.8);
+  font-size: calc(var(--unit) * 1.5);
 }
 
-.server-id:hover {
-  color: #aaccff !important;
+.info {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  text-align: center;
+  flex: 1;
+  padding-left: calc(var(--unit) * 5.9);
+}
+
+.region {
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--unit) * 3.5);
+}
+
+.serverId {
+  pointer-events: auto;
+  cursor: pointer;
+  font-size: 0.8em;
+  min-width: calc(var(--unit) * 3.5);
+}
+
+.map {
+  font-size: 0.8em;
+  min-width: calc(var(--unit) * 5.5);
 }
 </style>
