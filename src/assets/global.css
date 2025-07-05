@@ -1,0 +1,27 @@
+@keyframes slideDown {
+    0% {
+        top: -200px;
+    }
+    100% {
+        top: 200px;
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        top: 200px;
+    }
+    100% {
+        top: -200px;
+    }
+}
+
+* {
+    --disabled: #7f8c8d;
+    --primary: #2ecc71;
+    --background: rgba(20, 20, 20, 0.85);
+    --border: rgba(255, 255, 255, 0.15);
+    --text: #ecf0f1;
+    --unit: calc(max(0.56vw, 1vh, 3.75px));
+    font-family: 'Game', 'Microsoft YaHei', sans-serif;
+}
