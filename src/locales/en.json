@@ -1,5 +1,6 @@
 {
   "notice": {
+    "loaded": "SilentWhisper loaded.",
     "newVersion": "New version {version} published!"
   },
   "serverSwitcher": {

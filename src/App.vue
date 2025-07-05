@@ -2,18 +2,17 @@
 import "./assets/global.css";
 
 import {WebSocketService} from "./websocket.js";
-import WarnBannerManager from "./WarnBannerManager.vue";
 import MouseNoEffect from "./components/MouseNoEffect.vue";
 import {petalCountLoggerInit} from "./petalCountLogger";
 import {currentServerInfo, getPlayerId, getPlayerName} from "./player";
 import {nextTick, onMounted} from "vue";
 import ServerSwitcher from "./ServerSwitcher.vue";
-import {showWarnBanner} from "./warnBanner.ts";
 import {patchWebsocket} from "./gameWebsocket.ts";
 import {superReportInit} from "./superReport.ts";
-import SuperList from "./infoHud/SuperList.vue";
+import InfoHud from "./infoHud/InfoHud.vue";
 import CollectDisplayEntry from "./collectDisplay/CollectDisplayEntry.vue";
 import {useI18n} from "vue-i18n";
+import {notice} from "./infoHud/notice/notice.ts";
 const { t } = useI18n();
 
 const webSocketServerAddress = import.meta.env.SERVER;
@@ -37,11 +36,11 @@ webSocketService.subscribeOpen(() => {
 });
 webSocketService.subscribe('newVersion', (data) => {
   if(data.content.version!==VERSION){
-    showWarnBanner(t("notice.newVersion", {version: data.content.version}), 3500);
+    notice(t("notice.newVersion", {version: data.content.version}));
   }
 });
 webSocketService.subscribe('broadcast', (data) => {
-  showWarnBanner(data.content, data.time ?? 8000);
+  notice(data.content, data.time ?? 8000);
 });
 setInterval(() => {
   webSocketService.sendMessage({
@@ -61,11 +60,11 @@ onMounted(() => {
     webSocketService.connect();
   });
 });
+notice(t("notice.loaded"));
 </script>
 <template>
   <MouseNoEffect>
-    <WarnBannerManager/>
-    <SuperList :webSocketService="webSocketService"/>
+    <InfoHud :webSocketService="webSocketService"/>
   </MouseNoEffect>
   <ServerSwitcher/>
   <CollectDisplayEntry/>

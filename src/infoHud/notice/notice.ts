@@ -1,5 +1,4 @@
-// warnBanner.ts
-import {reactive} from 'vue';
+import {ref} from "vue";
 
 interface Banner {
   id: string
@@ -8,21 +7,21 @@ interface Banner {
   duration: number
 }
 
-export const banners = reactive<Banner[]>([]);
+export const notices = ref<Banner[]>([]);
 
 const timeouts: Record<string, ReturnType<typeof setTimeout>> = {};
 
-export function showWarnBanner(text: string, duration: number) {
-  if (banners.find(b => b.text === text)) return;
+export function notice(text: string, duration: number = 5000) {
+  if (notices.value.find(b => b.text === text)) return;
 
   const id = crypto.randomUUID();
-  const slot = findAvailableSlot(banners);
+  const slot = findAvailableSlot(notices.value);
 
-  banners.push({id, text, slot, duration});
+  notices.value.push({id, text, slot, duration});
 
   timeouts[id] = setTimeout(() => {
-    const index = banners.findIndex(b => b.id === id);
-    if (index !== -1) banners.splice(index, 1);
+    const index = notices.value.findIndex(b => b.id === id);
+    if (index !== -1) notices.value.splice(index, 1);
     delete timeouts[id];
   }, duration + 1000);
 }

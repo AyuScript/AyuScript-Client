@@ -1,11 +1,13 @@
 <script setup lang="ts">
 
-import SuperPanel from "./SuperPanel.vue";
+import SuperPanel from "./super/SuperPanel.vue";
 import type {WebSocketService} from "../websocket.ts";
 import {computed, ref} from "vue";
 import type {Mob} from "../florr";
-import { superNames } from "./superNames.ts";
+import { superNames } from "./super/superNames.ts";
 import SummaryPanel from "./SummaryPanel.vue";
+import {notices} from "./notice/notice.ts";
+import NoticePanel from "./notice/NoticePanel.vue";
 
 interface SuperPacket {
   content: {
@@ -88,6 +90,13 @@ webSocketService.subscribe('superpingModify', (data: SuperPacket) => {
                   :location="parseInfo(message.second)!.region + ' ' + (parseInfo(message.second)!.location ?? '')"
                   :time="message.first"
                   :code="parseInfo(message.second)!.code"></SuperPanel>
+    </transition-group>
+    <transition-group name="slide-fade">
+      <NoticePanel
+          v-for="notice in notices"
+          :key="notice.id"
+          :content="notice"
+      />
     </transition-group>
     <SummaryPanel :webSocketService="webSocketService"/>
   </div>
