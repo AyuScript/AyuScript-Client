@@ -1,11 +1,11 @@
 import {Encryptor} from "./encryption.ts";
 
 export default class NoneEncryptor extends Encryptor{
-  decrypt(data: string): any {
+  async decrypt(data: string) {
     return JSON.parse(data);
   }
 
-  encrypt(data: any): string {
+  async encrypt(data: any) {
     return JSON.stringify(data);
   }
 }
