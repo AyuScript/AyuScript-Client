@@ -2,7 +2,6 @@
 import {onMounted, ref} from 'vue';
 import {getWsURL} from './gameWebsocket';
 import {currentServerInfo} from "./player.ts";
-import {switchServerKey} from "./feature/features.ts";
 
 const matrixs = [
   'Garden', 'Desert', 'Ocean', 'Jungle', 'Ant Hell', 'Hel', 'Sewers', 'Factory', 'Pyramid'
@@ -22,6 +21,8 @@ const totalServers = matrixs.length;
 const position = '-240px';
 const showMenu = ref(false);
 const wssArr = ref<string[]>([]);
+
+const switchServerKey = ref("Backquote");
 
 function regionToName(code: string) {
   return code === 'NA' ? 'US' : code === 'EU' ? 'EU' : code === 'AS' ? 'AS' : code;
@@ -120,9 +121,11 @@ onMounted(() => {
 <template>
   <div class="serverSwitcherContainer" :style="{ top: showMenu ? '0px' : position }">
     <div>
-      Click on a server code to connect.<br/>
-      Press {{switchServerKey}} to toggle this menu.<br/>
-      Server Switcher by Furaken<br/>
+      {{ $t('serverSwitcher.title.1') }}
+      <br/>
+      {{ $t('serverSwitcher.title.2',{key: switchServerKey}) }}
+      <br/>
+      {{ $t('serverSwitcher.title.3') }}
     </div>
 
     <div v-if="currentServerInfo.map !== ''">
@@ -146,7 +149,7 @@ onMounted(() => {
     </div>
 
     <div v-else>
-      无法获取当前服务器信息，请刷新页面。
+      {{ $t('serverSwitcher.noInfo') }}
     </div>
   </div>
 </template>

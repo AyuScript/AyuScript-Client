@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import monkey from 'vite-plugin-monkey';
 import { version } from "./package.json";
-import { jsConfuserPlugin } from "./plugins/jsConfuserPlugin";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,16 +10,15 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    jsConfuserPlugin(),
     monkey({
       entry: 'src/main.ts',
       userscript: {
-        name: 'BetterFlorr',
-        namespace: 'https://superping.top/',
-        description: '更好的florr插件',
+        name: 'SilentWhisper',
+        namespace: 'https://silentwhisper.cc/',
+        description: 'A script aimed to enhance the experience of game florr.io',
         version: version,
-        author: 'Crystal_awa & LittleSwift',
-        include: ['https://florr.io/*'],
+        author: 'LittleSwift',
+        include: ['https://florr.io/*', 'https://silentwhisper.cc/install/*'],
         grant: "none"
       },
     }),

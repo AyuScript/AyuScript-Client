@@ -4,7 +4,6 @@ import {ref} from "vue";
 import {currentServerInfo} from "../player.ts";
 
 interface OnlinePeoplePacket {
-  type: 'onlineppl',
   content: {
     us: number,
     eu: number,
@@ -20,17 +19,15 @@ const { webSocketService } = defineProps<{
 const userInfo = ref({
   us: 0,
   eu: 0,
-  as: 0,
-  unknown: 0
+  as: 0
 });
 
 
-webSocketService.subscribe('onlineppl', (data: OnlinePeoplePacket) => {
+webSocketService.subscribe('onlinePeople', (data: OnlinePeoplePacket) => {
   userInfo.value = {
     us: data.content.us,
     eu: data.content.eu,
-    as: data.content.as,
-    unknown: data.content.idk,
+    as: data.content.as
   };
 });
 

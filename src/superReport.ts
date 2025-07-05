@@ -1,6 +1,6 @@
-import {currentServerInfo, getPlayerName, getString} from "./player.ts";
+import {currentServerInfo, getPlayerName} from "./player.ts";
 import type {WebSocketService} from "./websocket.ts";
-import {messageData} from "./message.ts";
+import {getString} from "./memory/utils.ts";
 
 type Message = {timestamp: number, color: [number, number, number], message: string};
 const keywords = [
@@ -51,7 +51,7 @@ export function superReportInit(webSocketService: WebSocketService) {
           server: currentServerInfo.value,
           message: message.message,
           timestamp: message.timestamp,
-          name: getPlayerName() || messageData.playerName
+          name: getPlayerName()
         });
       }
     });
