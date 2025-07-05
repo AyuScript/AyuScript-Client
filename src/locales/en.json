@@ -1,0 +1,13 @@
+{
+  "notice": {
+    "newVersion": "New version {version} published!"
+  },
+  "serverSwitcher": {
+    "title": {
+      "1": "Click on a server code to connect.",
+      "2": "Press {key} to toggle this menu.",
+      "3": "Server Switcher by Furaken"
+    },
+    "noInfo": "No server information available."
+  }
+}
