@@ -3,17 +3,16 @@ import "./assets/global.css";
 
 import {WebSocketService} from "./websocket.js";
 import MouseNoEffect from "./components/MouseNoEffect.vue";
-import {petalCountLoggerInit} from "./petalCountLogger";
 import {currentServerInfo, getPlayerId, getPlayerName} from "./player";
 import {nextTick, onMounted} from "vue";
 import {patchWebsocket} from "./gameWebsocket.ts";
-import {superReportInit} from "./superReport.ts";
 import InfoHud from "./infoHud/InfoHud.vue";
-import CollectDisplayEntry from "./collectDisplay/CollectDisplayEntry.vue";
 import {useI18n} from "vue-i18n";
-import {notice} from "./infoHud/notice/notice.ts";
+import {notice} from "@/infoHud/notice/notice.ts";
 import AesGcmEncryptor from "@/encryption/aes-gcm.ts";
 import NoneEncryptor from "@/encryption/none.ts";
+import {injectAPI} from "@/memory/wasmExtraction.ts";
+import {petalCountLoggerInit} from "@/petalCountLogger.ts";
 const { t } = useI18n();
 
 const webSocketServerAddress = import.meta.env.VITE_SERVER;
@@ -26,8 +25,9 @@ switch (import.meta.env.VITE_ENCRYPTION) {
     webSocketService.applyEncryptor(new AesGcmEncryptor(import.meta.env.VITE_ENCRYPTION_KEY));
     break;
 }
-petalCountLoggerInit(webSocketService);
-superReportInit(webSocketService);
+injectAPI().then(({ inventory }) => {
+  petalCountLoggerInit(inventory);
+});
 patchWebsocket();
 webSocketService.subscribeOpen(() => {
   let name: string;
@@ -75,5 +75,4 @@ notice(t("notice.loaded"));
   <MouseNoEffect>
     <InfoHud :webSocketService="webSocketService"/>
   </MouseNoEffect>
-  <CollectDisplayEntry/>
 </template>
