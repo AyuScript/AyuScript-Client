@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {currentServerInfo} from "../../player.ts";
+import {currentServerInfo} from "@/player.ts";
 
 const { mobId } = defineProps<{
   mobId: number,
