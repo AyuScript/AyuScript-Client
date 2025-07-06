@@ -1,6 +1,6 @@
 # SilentWhisper Client
 
-This is a script aimed to enhance the experience of game [florr.io](https://florr.io/) with zero injection to browser native APIs.
+This is a script aimed to enhance the experience of game [florr.io](https://florr.io/) with zero injection to canvas APIs.
 
 ## How to use
 ### For users
