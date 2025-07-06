@@ -38,7 +38,10 @@ const deleteItem = (index: number) => {
               </option>
             </select>
           </td>
-          <td class="grow"><input type="number" v-model.number="goal.goal" /></td>
+          <td class="grow"><input type="number" v-model.number="goal.goal"
+                                  @keydown.stop
+                                  @keypress.stop
+                                  @keyup.stop/></td>
           <td><button @click="deleteItem(index)">{{$t('settings.delete')}}</button></td>
         </tr>
       </tbody>
