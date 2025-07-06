@@ -2,19 +2,8 @@
 import {useDetail} from "@/petalCountLogger.ts";
 import {ref} from "vue";
 import GoalProgress from "@/infoHud/goal/GoalProgress.vue";
+import {goals} from "@/storage/globals.ts";
 
-const goals = [
-  {
-    petalId: 79,
-    petalRarity: 6,
-    goal: 253
-  },
-  {
-    petalId: 79,
-    petalRarity: 5,
-    goal: 128
-  }
-];
 const rarityColor = ['#7EEF6D', '#FFE65D', '#4D52E3', '#861FDE', '#DE1F1F', '#1FDBDE', '#FF2B75', '#2BFFA3', '#555555'];
 const craftCount = [6.40625, 10.3125, 18.125, 33.75, 65, 127.5, 252.5, NaN, NaN];
 const show = ref(false);
@@ -31,7 +20,7 @@ const interval = setInterval(()=>{
 </script>
 
 <template>
-  <div class="card" v-if="show">
+  <div class="card" v-if="show && goals.length">
     <div v-for="goal in goals" class="info">
       <img class="icon-box" :src="getImageUrl(goal.petalId, goal.petalRarity)"/>
       <div class="goal">

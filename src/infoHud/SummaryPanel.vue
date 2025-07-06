@@ -14,10 +14,7 @@ interface OnlinePeoplePacket {
 }
 
 const { webSocketService } = defineProps<{
-  webSocketService: WebSocketService,
-  switcherOptions: {
-    showSwitcher: boolean
-  }
+  webSocketService: WebSocketService
 }>();
 
 const userInfo = ref({
@@ -55,7 +52,8 @@ requestAnimationFrame(update);
 <template>
   <div class="card">
     <div class="info">
-      <div class="detail">
+      <div class="detail code"
+           @click="eventBus.emit('showSettings')">
         <span>You're</span>
         <span :class="webSocketService.isConnected.value ? 'highlight' : 'error'">
           {{webSocketService.isConnected.value ? "Online" : "Offline"}}

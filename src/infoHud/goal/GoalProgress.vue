@@ -33,7 +33,6 @@ const remaining = computed(() => {
   const used = visibleSegments.value.reduce((sum, s) => sum + s.width, 0);
   return Math.max(0, 100 - used);
 });
-console.log(visibleSegments.value);
 </script>
 
 <template>
