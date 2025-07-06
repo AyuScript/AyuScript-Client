@@ -73,5 +73,6 @@ declare global {
     florrio: Florrio;
     Module: ModuleType;
     cp6: Cp6;
+    versionHash: string;
   }
 }

@@ -18,19 +18,42 @@ function parseInventory(bytes: Uint8Array): number {
   throw new Error('Could not find the magic value for "inventory"');
 }
 
+async function streamToUint8Array(stream: ReadableStream<Uint8Array>): Promise<Uint8Array> {
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    if (value) chunks.push(value);
+  }
+
+  // Calculate total length
+  const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+
+  // Concatenate all chunks
+  const result = new Uint8Array(totalLength);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.length;
+  }
+
+  return result;
+}
+
+
 export async function injectAPI(): Promise<{
   inventory: number
 }>{
   return new Promise((resolve => {
-    WebAssembly.instantiateStreaming =
-      (src, imports) => (src as Response).arrayBuffer().then(buf => WebAssembly.instantiate(buf, imports));
-    const instantiate = WebAssembly.instantiate;
-    WebAssembly.instantiate = ((buf: ArrayBuffer, imports: WebAssembly.Imports) => {
-      const bytes = new Uint8Array(buf);
+    fetch(`https://static.florr.io/${window.versionHash}/client.wasm`)
+      .then(response => response.body)
+      .then(async stream => {
+      const bytes = await streamToUint8Array(stream!);
       resolve({
         inventory: parseInventory(bytes)
       });
-      return instantiate(buf, imports);
-    }) as any;
+    });
   }));
 }
