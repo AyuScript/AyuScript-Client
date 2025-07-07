@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {goals} from "@/storage/globals.ts";
 
+const rarityColor = ['#7EEF6D', '#FFE65D', '#4D52E3', '#861FDE', '#DE1F1F', '#1FDBDE', '#FF2B75', '#2BFFA3', '#555555'];
+
 const addItem = () => {
   goals.value.push({ petalId: 1, petalRarity: 0, goal: 1 })
 }
@@ -8,6 +10,36 @@ const addItem = () => {
 const deleteItem = (index: number) => {
   goals.value.splice(index, 1)
 }
+
+function darkenHexColor(hex: string, percent: number): string {
+  const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
+  percent = clamp(percent, 0, 100);
+
+  hex = hex.replace(/^#/, '');
+
+  let r: number, g: number, b: number;
+
+  if (hex.length === 3) {
+    r = parseInt(hex[0] + hex[0], 16);
+    g = parseInt(hex[1] + hex[1], 16);
+    b = parseInt(hex[2] + hex[2], 16);
+  } else if (hex.length === 6) {
+    r = parseInt(hex.substring(0, 2), 16);
+    g = parseInt(hex.substring(2, 4), 16);
+    b = parseInt(hex.substring(4, 6), 16);
+  } else {
+    throw new Error('Invalid hex color');
+  }
+
+  r = Math.round(r * (1 - percent / 100));
+  g = Math.round(g * (1 - percent / 100));
+  b = Math.round(b * (1 - percent / 100));
+
+  const toHex = (c: number) => c.toString(16).padStart(2, '0');
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
 </script>
 
 <template>
@@ -33,6 +65,7 @@ const deleteItem = (index: number) => {
                   v-for="i in 9"
                   :key="i - 1"
                   :value="i - 1"
+                  :style="{backgroundColor: darkenHexColor(rarityColor[i - 1], 30)}"
               >
                 {{$t(`rarity.${i - 1}`)}}
               </option>
@@ -84,6 +117,10 @@ select, input, button {
   color: #ffffff;
   outline: none;
   font-size: 1em;
+}
+option {
+  background-color: #555555;
+  color: white;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
