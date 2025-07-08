@@ -8,3 +8,4 @@ export interface Goal {
 
 
 export const goals = useStorage<Goal[]>('goals', []);
+export const information = useStorage<'fps'|'ping'>('information', 'fps');

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
 import GoalSettings from "@/infoHud/settings/GoalSettings.vue";
+import BasicSettings from "@/infoHud/settings/BasicSettings.vue";
 </script>
 <template>
   <div class="card">
     <div class="info">
+      <BasicSettings/>
       <GoalSettings/>
     </div>
   </div>

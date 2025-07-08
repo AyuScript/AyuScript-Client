@@ -124,6 +124,16 @@
   },
   "settings": {
     "delete": "Delete",
+    "basic": {
+      "title": "Basic",
+      "information": "Information: "
+    },
     "goals": "Goals"
+  },
+  "summary": {
+    "info": {
+      "fps": "FPS",
+      "ping": "Ping"
+    }
   }
 }

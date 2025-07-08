@@ -3,6 +3,7 @@ import {WebSocketService} from "../websocket.ts";
 import {ref} from "vue";
 import {currentServerInfo} from "../player.ts";
 import {eventBus} from "@/eventBus.ts";
+import {information} from "@/storage/globals.ts";
 
 interface OnlinePeoplePacket {
   content: {
@@ -48,6 +49,17 @@ function update(now: number) {
 }
 
 requestAnimationFrame(update);
+
+const ping = ref(0);
+setInterval(()=>{
+  const start = performance.now();
+  fetch(`https://${currentServerInfo.value.serverId}.s.m28n.net/`)
+      .then(response => response.json())
+      .then(_ => {
+        const end = performance.now();
+        ping.value = (end - start) ;
+      });
+}, 5000);
 </script>
 <template>
   <div class="card">
@@ -79,9 +91,13 @@ requestAnimationFrame(update);
         <span>Code</span>
         <span>{{currentServerInfo.serverId}}</span>
       </div>
-      <div class="detail">
-        <span>FPS</span>
+      <div class="detail" v-if="information === 'fps'">
+        <span>{{$t("summary.info.fps")}}</span>
         <span>{{fps.toFixed(0)}}</span>
+      </div>
+      <div class="detail" v-if="information === 'ping'">
+        <span>{{$t("summary.info.ping")}}</span>
+        <span>{{ping.toFixed(0)}}</span>
       </div>
     </div>
   </div>
