@@ -55,10 +55,11 @@ const interval = setInterval(()=>{
         </div>
         <span>
           {{((detail![goal.petalRarity]![goal.petalId] +
-             (goal.petalRarity >= 1 ? detail![goal.petalRarity - 1]![goal.petalId]
+             (goal.petalRarity >= 1 ?
+             detail![goal.petalRarity - 1]![goal.petalId]
              / craftCount[goal.petalRarity - 1] : 0) +
              (goal.petalRarity >= 2 ?
-             detail![goal.petalRarity - 1]![goal.petalId]
+             detail![goal.petalRarity - 2]![goal.petalId]
              / craftCount[goal.petalRarity - 1]
              / craftCount[goal.petalRarity - 2]: 0)) / goal.goal * 100).toFixed(1)}}%
         </span>
@@ -67,7 +68,7 @@ const interval = setInterval(()=>{
                                (detail![goal.petalRarity - 1]![goal.petalId]
                                / craftCount[goal.petalRarity - 1]) / goal.goal * 100 : 0"
                       :value3="goal.petalRarity >= 2 ?
-                               (detail![goal.petalRarity - 1]![goal.petalId]
+                               (detail![goal.petalRarity - 2]![goal.petalId]
                                / craftCount[goal.petalRarity - 1]
                                / craftCount[goal.petalRarity - 2]) / goal.goal * 100 : 0"
                       :colors="[rarityColor[goal.petalRarity],
