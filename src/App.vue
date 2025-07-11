@@ -13,7 +13,6 @@ import AesGcmEncryptor from "@/encryption/aes-gcm.ts";
 import NoneEncryptor from "@/encryption/none.ts";
 import {injectAPI} from "@/memory/wasmExtraction.ts";
 import {petalCountLoggerInit} from "@/petalCountLogger.ts";
-import Inventory from "@/infoHud/inventory/Inventory.vue";
 const { t } = useI18n();
 
 const webSocketServerAddress = import.meta.env.VITE_SERVER;

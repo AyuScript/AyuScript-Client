@@ -78,10 +78,9 @@ function format(num: number) {
     <div class="container">
       <div class="item" v-for="item in renderedInventory">
         <img class="image" :src="getImageUrl(item.petalId, item.rarity)"/>
-        <img v-if="item.count > 0"
-             :class="['image', { gray: item.subCount == 0 }]"
+        <img v-if="item.rarity > 0 && item.subCount > 0"
+             class="image"
              :src="getImageUrl(item.petalId, item.rarity - 1)"/>
-        <img v-else class="image gray" :src="getImageUrl(item.petalId, item.rarity)"/>
         <span v-if="item.count > 0" class="tag one" :data-content="`x${format(item.count)}`">
           x{{format(item.count)}}
         </span>
@@ -137,9 +136,6 @@ function format(num: number) {
 .image {
   width: 50px;
   height: 50px;
-}
-.gray {
-  filter: grayscale(100%);
 }
 .tag {
   position: absolute;
