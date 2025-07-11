@@ -23,5 +23,5 @@
     --border: rgba(255, 255, 255, 0.15);
     --text: #ecf0f1;
     --unit: calc(max(0.56vw, 1vh, 3.75px));
-    font-family: 'Game', 'Microsoft YaHei', sans-serif;
+    font-family: 'Game', Ubuntu, 'Microsoft YaHei', sans-serif;
 }
