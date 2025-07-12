@@ -117,6 +117,7 @@ select, input, button {
   color: #ffffff;
   outline: none;
   font-size: 1em;
+  white-space: nowrap;
 }
 option {
   background-color: #555555;
