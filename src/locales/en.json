@@ -174,7 +174,7 @@
     "48": "Air",
     "49": "Basil",
     "50": "Orange",
-    "51": "Ant Egg",
+    "51": "Egg",
     "52": "Poo",
     "53": "Relic",
     "54": "Lotus",
@@ -238,7 +238,8 @@
       "information": "Information: ",
       "copyInventory": "Copy Inventory"
     },
-    "goals": "Goals"
+    "goals": "Goals",
+    "language": "Language"
   },
   "summary": {
     "info": {

@@ -60,6 +60,17 @@ setInterval(()=>{
         ping.value = (end - start) ;
       });
 }, 5000);
+
+const getPingColor = (ping: number) => {
+  if (ping < 1000) return 'good';
+  if (ping < 1500) return 'warn';
+  return 'bad';
+};
+const getFpsColor = (fps: number) => {
+  if (fps > 50) return 'good';
+  if (fps > 30) return 'warn';
+  return 'bad';
+};
 </script>
 <template>
   <div class="card">
@@ -93,11 +104,11 @@ setInterval(()=>{
       </div>
       <div class="detail" v-if="information === 'fps'">
         <span>{{$t("summary.info.fps")}}</span>
-        <span>{{fps.toFixed(0)}}</span>
+        <span :class="getFpsColor(fps)">{{fps.toFixed(0)}}</span>
       </div>
       <div class="detail" v-if="information === 'ping'">
         <span>{{$t("summary.info.ping")}}</span>
-        <span>{{ping.toFixed(0)}}</span>
+        <span :class="getPingColor(ping)">{{ping.toFixed(0)}}</span>
       </div>
     </div>
   </div>
@@ -142,6 +153,15 @@ setInterval(()=>{
 }
 
 .error {
+  color: #f23e3e;
+}
+.good {
+  color: #3ef29d;
+}
+.warn {
+  color: #ffd700;
+}
+.bad {
   color: #f23e3e;
 }
 </style>
