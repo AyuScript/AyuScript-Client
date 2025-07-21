@@ -71,6 +71,10 @@ const getFpsColor = (fps: number) => {
   if (fps > 30) return 'warn';
   return 'bad';
 };
+
+function toggleInformation() {
+  information.value = information.value === 'fps' ? 'ping' : 'fps';
+}
 </script>
 <template>
   <div class="card">
@@ -102,11 +106,11 @@ const getFpsColor = (fps: number) => {
         <span>Code</span>
         <span>{{currentServerInfo.serverId}}</span>
       </div>
-      <div class="detail" v-if="information === 'fps'">
+      <div class="detail code" v-if="information === 'fps'" @click="toggleInformation">
         <span>{{$t("summary.info.fps")}}</span>
         <span :class="getFpsColor(fps)">{{fps.toFixed(0)}}</span>
       </div>
-      <div class="detail" v-if="information === 'ping'">
+      <div class="detail code" v-if="information === 'ping'" @click="toggleInformation">
         <span>{{$t("summary.info.ping")}}</span>
         <span :class="getPingColor(ping)">{{ping.toFixed(0)}}</span>
       </div>
