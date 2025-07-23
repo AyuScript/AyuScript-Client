@@ -1,4 +1,4 @@
-# SilentWhisper Client
+# AyuScript Client
 
 This is a script aimed to enhance the experience of game [florr.io](https://florr.io/) with zero injection to canvas APIs.
 
@@ -7,7 +7,7 @@ This is a script aimed to enhance the experience of game [florr.io](https://flor
 #### Requirement
 Tampermonkey installed on your browser
 #### Install
-You should install our script from [official website](https://silentwhisper.cc/) to get a best experience.
+You should install our script from [official website](https://ayuscript.cc/) to get a best experience.
 ### For developers
 #### Requirement
 - Node.js 18 or newer

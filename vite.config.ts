@@ -19,12 +19,12 @@ export default defineConfig({
     monkey({
       entry: 'src/main.ts',
       userscript: {
-        name: 'SilentWhisper',
-        namespace: 'https://silentwhisper.cc/',
+        name: 'AyuScript',
+        namespace: 'https://ayuscript.cc/',
         description: 'A script aimed to enhance the experience of game florr.io',
         version: version,
         author: 'LittleSwift',
-        include: ['https://florr.io/*', 'https://silentwhisper.cc/install/*'],
+        include: ['https://florr.io/*', 'https://ayuscript.cc/install/*'],
         grant: "none"
       },
     }),
