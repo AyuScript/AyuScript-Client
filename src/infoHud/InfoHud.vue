@@ -10,6 +10,7 @@ import {eventBus} from "@/eventBus.ts";
 import SuperPanelGroup from "@/infoHud/super/SuperPanelGroup.vue";
 import GoalPanel from "@/infoHud/goal/GoalPanel.vue";
 import SettingsPanel from "@/infoHud/settings/SettingsPanel.vue";
+import CraftGroup from "@/infoHud/craft/CraftGroup.vue";
 
 const { webSocketService } = defineProps<{
   webSocketService: WebSocketService,
@@ -41,6 +42,7 @@ eventBus.on("showSettings", ()=>{
           :content="notice"
       />
     </transition-group>
+    <CraftGroup/>
     <GoalPanel/>
     <transition name="slide-down">
       <SwitcherPanel v-show="showSwitcher"/>

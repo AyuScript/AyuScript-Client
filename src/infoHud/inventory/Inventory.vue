@@ -2,6 +2,7 @@
 import {useDetail} from "@/petalCountLogger.ts";
 import {useI18n} from "vue-i18n";
 import {getPlayerName} from "@/player.ts";
+import {getImageUrl} from "@/florr/image.ts";
 const { t } = useI18n();
 
 const inventory = useDetail();
@@ -46,18 +47,6 @@ const renderedInventory = (() => {
   );
   return result;
 })();
-
-
-const imageCache = new Map<string, string>();
-
-function getImageUrl(petalId: number, petalRarity: number): string {
-  const key = `${petalId}-${petalRarity}`;
-  if (!imageCache.has(key)) {
-    const url = window.florrio.utils.generatePetalImage(128, petalId, petalRarity, 1);
-    imageCache.set(key, url);
-  }
-  return imageCache.get(key)!;
-}
 
 function format(num: number) {
   if (num >= 1000000) {

@@ -3,20 +3,10 @@ import {useDetail} from "@/petalCountLogger.ts";
 import {ref} from "vue";
 import GoalProgress from "@/infoHud/goal/GoalProgress.vue";
 import {goals} from "@/storage/globals.ts";
+import {getImageUrl} from "@/florr/image.ts";
+import {craftCount, rarityColor} from "@/florr/const.ts";
 
-const rarityColor = ['#7EEF6D', '#FFE65D', '#4D52E3', '#861FDE', '#DE1F1F', '#1FDBDE', '#FF2B75', '#2BFFA3', '#555555'];
-const craftCount = [6.40625, 10.3125, 18.125, 33.75, 65, 127.5, 252.5, NaN, NaN];
 const show = ref(false);
-const imageCache = new Map<string, string>();
-
-function getImageUrl(petalId: number, petalRarity: number): string {
-  const key = `${petalId}-${petalRarity}`;
-  if (!imageCache.has(key)) {
-    const url = window.florrio.utils.generatePetalImage(128, petalId, petalRarity, 1);
-    imageCache.set(key, url);
-  }
-  return imageCache.get(key)!;
-}
 
 const detail = useDetail();
 const interval = setInterval(()=>{

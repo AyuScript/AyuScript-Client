@@ -1,0 +1,2 @@
+export const rarityColor = ['#7EEF6D', '#FFE65D', '#4D52E3', '#861FDE', '#DE1F1F', '#1FDBDE', '#FF2B75', '#2BFFA3', '#555555'];
+export const craftCount = [6.40625, 10.3125, 18.125, 33.75, 65, 127.5, 252.5, NaN, NaN];
