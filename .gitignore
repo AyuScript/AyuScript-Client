@@ -25,3 +25,4 @@ dist-ssr
 
 # Environment
 .env.production
+src/proto

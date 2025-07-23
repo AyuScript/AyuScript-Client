@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+message Envelope {
+  oneof payload {
+    Handshake handshake = 1;
+    Heartbeat heartbeat = 2;
+  }
+}
+
+message Handshake {
+  string version = 1;
+  string playerName = 2;
+  string playerId = 3;
+}
+
+message Heartbeat {
+  string playerName = 1;
+  string playerId = 2;
+  string region = 3;
+  string map = 4;
+  string serverId = 5;
+}
+

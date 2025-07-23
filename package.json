@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "proto:generate": "protoc --ts_proto_out=./src ./proto/*.proto --ts_proto_opt=esModuleInterop=true",
+    "proto:watch": "chokidar \"**/*.proto\" -c \"npm run proto:generate\"",
     "dev": "vite",
     "build": "vite build",
     "preview": "vue-tsc -b && vite preview"
@@ -12,12 +14,14 @@
     "dom-to-image": "^2.6.0",
     "mitt": "^3.0.1",
     "vue": "^3.5.13",
-    "vue-i18n": "^11.1.9"
+    "vue-i18n": "^11.1.9",
+    "ts-proto": "^2.7.3"
   },
   "devDependencies": {
     "@types/dom-to-image": "^2.6.7",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vue/tsconfig": "^0.7.0",
+    "chokidar-cli": "^3.0.0",
     "js-confuser": "^2.0.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
