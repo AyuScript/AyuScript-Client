@@ -78,7 +78,7 @@ function format(num: number) {
         </span>
       </div>
     </div>
-    <span class="hint">Generated with SilentWhisper</span>
+    <span class="hint">Generated with AyuScript</span>
   </div>
 </template>
 
@@ -156,7 +156,7 @@ function format(num: number) {
 }
 .hint::before {
   position: absolute;
-  content: "Generated with SilentWhisper";
+  content: "Generated with AyuScript";
   color: transparent;
   -webkit-text-stroke: 1.25px black;
   z-index: -1;

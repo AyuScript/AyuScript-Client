@@ -14,7 +14,7 @@ You should install our script from [official website](https://ayuscript.cc/) to 
 - Yarn
 #### Develop
 - Run `yarn run dev` to start the development server.
-- Don't forget to run a server from [this GitHub repository](https://github.com/LittleSwift/SilentWhisper-Server) or write one by yourself, or only partial functionalities can be enabled.
+- Don't forget to run a server from [this GitHub repository](https://github.com/AyuScript/AyuScript-Server) or write one by yourself, or only partial functionalities can be enabled.
 #### Build
 - Create a `.env.production` file, with the same format as `.env.development`
 - Run `yarn run build` to build the script.
