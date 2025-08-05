@@ -1,19 +1,19 @@
 syntax = "proto3";
 
-message Envelope {
+message C2SEnvelope {
   oneof payload {
-    Handshake handshake = 1;
-    Heartbeat heartbeat = 2;
+    C2SHandshake handshake = 1;
+    C2SHeartbeat heartbeat = 2;
   }
 }
 
-message Handshake {
+message C2SHandshake {
   string version = 1;
   string playerName = 2;
   string playerId = 3;
 }
 
-message Heartbeat {
+message C2SHeartbeat {
   string playerName = 1;
   string playerId = 2;
   string region = 3;

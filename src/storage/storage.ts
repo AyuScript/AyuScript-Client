@@ -1,6 +1,6 @@
 import {ref, type Ref, watch} from "vue";
 
-const storageName = 'SilentWhisper';
+const storageName = 'AyuScript';
 
 function loadStorage(path: string) {
   const storage = JSON.parse(localStorage.getItem(storageName) ?? '{}');

@@ -9,7 +9,6 @@ import {patchWebsocket} from "./gameWebsocket.ts";
 import InfoHud from "./infoHud/InfoHud.vue";
 import {useI18n} from "vue-i18n";
 import {notice} from "@/infoHud/notice/notice.ts";
-import AesGcmEncryptor from "@/encryption/aes-gcm.ts";
 import NoneEncryptor from "@/encryption/none.ts";
 import {injectAPI} from "@/memory/wasmExtraction.ts";
 import {petalCountLoggerInit} from "@/petalCountLogger.ts";
@@ -21,26 +20,18 @@ switch (import.meta.env.VITE_ENCRYPTION) {
   case 'none':
     webSocketService.applyEncryptor(new NoneEncryptor());
     break;
-  case 'aes-gcm':
-    webSocketService.applyEncryptor(new AesGcmEncryptor(import.meta.env.VITE_ENCRYPTION_KEY));
-    break;
 }
 injectAPI().then(({ inventory }) => {
   petalCountLoggerInit(inventory);
 });
 patchWebsocket();
 webSocketService.subscribeOpen(() => {
-  let name: string;
-  try {
-    name = getPlayerName();
-  } catch (e) {
-    name = "EMPTY";
-  }
   webSocketService.sendMessage({
-    type: 'handshake',
-    version: VERSION,
-    playerName: name,
-    playerId: getPlayerId()
+    handshake: {
+      version: VERSION,
+      playerId: getPlayerId(),
+      playerName: getPlayerName()
+    }
   });
 });
 webSocketService.subscribe('newVersion', (data) => {
@@ -49,18 +40,16 @@ webSocketService.subscribe('newVersion', (data) => {
   }
 });
 webSocketService.subscribe('broadcast', (data) => {
-  notice(data.content, data.time ?? 8000);
+  notice(data.message);
 });
 setInterval(() => {
   webSocketService.sendMessage({
-    type: 'online',
-    content: {
-      playerName : getPlayerName(),
+    heartbeat: {
       playerId : getPlayerId(),
+      playerName : getPlayerName(),
       region: currentServerInfo.value.region,
       map: currentServerInfo.value.map,
       serverId: currentServerInfo.value.serverId,
-      version: VERSION,
     }
   });
 }, 5000);

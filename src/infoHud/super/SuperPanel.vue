@@ -3,14 +3,22 @@ import {currentServerInfo} from "@/player.ts";
 
 const { mobId } = defineProps<{
   mobId: number,
-  name: string,
-  location: string,
-  time: string,
+  region: string,
+  loc: string,
+  time: number,
   code?: string,
   tracing?: string,
 }>();
 function getImageUrl(): string {
   return window.florrio.utils.generateMobImage(128,mobId,7,1);
+}
+function formatTimestamp(timestamp: number) {
+  const date = new Date(timestamp);
+  const hrs = date.getHours();
+  const mins = date.getMinutes();
+  const secs = date.getSeconds();
+
+  return [hrs, mins, secs].map(unit => String(unit).padStart(2, '0')).join(':');
 }
 </script>
 <template>
@@ -18,10 +26,10 @@ function getImageUrl(): string {
     <img class="icon-box" :src="getImageUrl()" />
 
     <div class="info">
-      <div class="title">{{name}}</div>
-      <div class="location">{{location}}</div>
+      <div class="title">{{$t(`mob.${mobId}`)}}</div>
+      <div class="location">{{region}} {{loc}}</div>
       <div class="details">
-        <span class="time">{{time}}</span>
+        <span class="time">{{formatTimestamp(time)}}</span>
         <span class="code">{{code}}</span>
       </div>
     </div>

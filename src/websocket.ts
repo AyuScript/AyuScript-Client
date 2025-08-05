@@ -1,6 +1,8 @@
 import {ref, type Ref} from 'vue';
-import type {Encryptor} from "./encryption/encryption.ts";
-import NoneEncryptor from "./encryption/none.ts";
+import type {Encryptor} from "@/encryption/encryption.ts";
+import NoneEncryptor from "@/encryption/none.ts";
+import { C2SEnvelope } from "@/proto/c2s.ts";
+import {S2CEnvelope} from "@/proto/s2c.ts";
 
 type Callback = (data: any) => void;
 
@@ -62,11 +64,15 @@ export class WebSocketService {
 
     this.ws.onmessage = async (event) => {
       try {
-        const decrypted = this.encryptor.decrypt(event.data);
+        const decrypted = await this.encryptor.decrypt(
+          await (event.data as Blob).arrayBuffer().then((buffer) => new Uint8Array(buffer))
+        );
+        const object = S2CEnvelope.decode(decrypted);
+        const type = getDefinedKey(object);
         this.messages.value.push(decrypted);
-        const subscribers = this.subscriptions.get(decrypted.type);
+        const subscribers = this.subscriptions.get(type);
         if (subscribers) {
-          subscribers.forEach((cb) => cb(decrypted));
+          subscribers.forEach((cb) => cb(object[type]));
         }
       } catch (e) {
         // Wrong type of encryption
@@ -75,12 +81,14 @@ export class WebSocketService {
     }
   }
 
-  public async sendMessage(message: any) {
+  public async sendMessage(message: C2SEnvelope) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const encryptedMessage = this.encryptor.encrypt(message);
+      const encryptedMessage = await this.encryptor.encrypt(
+        C2SEnvelope.encode(C2SEnvelope.fromJSON(message)).finish()
+      );
       this.ws.send(encryptedMessage);
     } else {
-      console.error('WebSocket is not open')
+      // console.error('WebSocket is not open');
     }
   }
 
@@ -113,4 +121,13 @@ export class WebSocketService {
   public unsubscribeOpen(callback: () => void) {
     this.openSubscriptions = this.openSubscriptions.filter((cb) => cb !== callback);
   }
+}
+
+function getDefinedKey<T extends Record<string, any>>(obj: T): keyof T {
+  for (const key in obj) {
+    if (obj[key] !== undefined) {
+      return key as keyof T;
+    }
+  }
+  throw new Error('Corrupted packet');
 }

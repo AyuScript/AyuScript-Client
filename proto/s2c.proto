@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+message S2CEnvelope {
+  oneof payload {
+    S2CBroadcast broadcast = 1;
+    S2CSupers supers = 2;
+  }
+}
+
+message S2CBroadcast {
+  string message = 1;
+}
+
+message S2CSupers {
+  repeated S2CSuper supers = 1;
+}
+
+message S2CSuper {
+  int32 id = 1;
+  int64 time = 2;
+  string region = 3;
+  optional string loc = 4;
+  optional string code = 5;
+}
