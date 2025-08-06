@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import {currentServerInfo} from "@/player.ts";
+import {eventBus} from "@/eventBus.ts";
 
-const { mobId } = defineProps<{
+const { mobId, code, tracing } = defineProps<{
   mobId: number,
   region: string,
-  loc: string,
+  loc?: string,
   time: number,
   code?: string,
-  tracing?: string,
+  tracing: string,
 }>();
 function getImageUrl(): string {
   return window.florrio.utils.generateMobImage(128,mobId,7,1);
@@ -19,6 +20,16 @@ function formatTimestamp(timestamp: number) {
   const secs = date.getSeconds();
 
   return [hrs, mins, secs].map(unit => String(unit).padStart(2, '0')).join(':');
+}
+function trace() {
+  if (!code) {
+    return;
+  }
+  if (tracing == code) {
+    eventBus.emit('trace', '');
+  } else {
+    eventBus.emit('trace', code);
+  }
 }
 </script>
 <template>
@@ -34,9 +45,13 @@ function formatTimestamp(timestamp: number) {
       </div>
     </div>
 
-    <button :class="['trace-button', {disabled: !code, traced: currentServerInfo.serverId == code}]"
-            :disabled="!code || currentServerInfo.serverId == code">
-      {{currentServerInfo.serverId == code ? "Traced" : "Trace"}}
+    <button :class="['trace-button', {disabled: !code,
+                    traced: currentServerInfo.serverId == code,
+                    tracing: tracing == code}]"
+            :disabled="!code || currentServerInfo.serverId == code"
+            @click="trace">
+      {{currentServerInfo.serverId == code ? "Traced" :
+        tracing == code ? "Tracing" : "Trace"}}
     </button>
   </div>
 </template>
@@ -101,13 +116,22 @@ function formatTimestamp(timestamp: number) {
   cursor: default;
 }
 
+.trace-button.tracing {
+  filter: hue-rotate(40deg);
+  cursor: default;
+}
+
 .trace-button.traced {
   filter: hue-rotate(-80deg);
   cursor: default;
 }
 
-.trace-button:hover:not(.disabled):not(.traced) {
+.trace-button:hover:not(.disabled):not(.traced):not(.tracing) {
   filter: brightness(1.05);
+}
+
+.trace-button:hover:not(.disabled):not(.traced) {
+  filter: hue-rotate(40deg) brightness(1.05);
 }
 
 </style>

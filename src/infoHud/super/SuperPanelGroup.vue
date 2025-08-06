@@ -4,16 +4,38 @@ import SuperPanel from "@/infoHud/super/SuperPanel.vue";
 import {ref} from "vue";
 import type {WebSocketService} from "@/websocket.ts";
 import {S2CSuper, S2CSupers} from "@/proto/s2c.ts";
+import {eventBus} from "@/eventBus.ts";
+import {connectToServer, type Matrix, useServers} from "@/florr/server.ts";
+import {currentServerInfo} from "@/player.ts";
 
 const { webSocketService } = defineProps<{
   webSocketService: WebSocketService,
 }>();
+
+const servers = useServers();
 
 const superList = ref<S2CSuper[]>([]);
 
 webSocketService.subscribe('supers', (data: S2CSupers) => {
   superList.value = data.supers;
 });
+
+const tracing = ref('');
+eventBus.on('trace', code => {
+  tracing.value = code as string;
+});
+let lastTrace = 0;
+setInterval(() => {
+  if (tracing.value && currentServerInfo.value.serverId != tracing.value && Date.now() - lastTrace > 5000) {
+    for (const group of Object.values(servers.value[currentServerInfo.value.map as Matrix])) {
+      if (tracing.value in group) {
+        lastTrace = Date.now();
+        connectToServer(tracing.value);
+        return;
+      }
+    }
+  }
+}, 100);
 </script>
 
 <template>
@@ -23,7 +45,8 @@ webSocketService.subscribe('supers', (data: S2CSupers) => {
                 :region="s.region"
                 :loc="s.loc"
                 :time="s.time"
-                :code="s.code"></SuperPanel>
+                :code="s.code"
+                :tracing="tracing"></SuperPanel>
   </transition-group>
 </template>
 
