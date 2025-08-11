@@ -66,13 +66,3 @@ export interface Petal {
   sid: string;
   rarities: PetalRarity[];
 }
-
-
-declare global {
-  export interface Window {
-    florrio: Florrio;
-    Module: ModuleType;
-    cp6: Cp6;
-    versionHash: string;
-  }
-}

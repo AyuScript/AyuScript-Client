@@ -12,6 +12,7 @@ import {notice} from "@/infoHud/notice/notice.ts";
 import NoneEncryptor from "@/encryption/none.ts";
 import {injectAPI} from "@/memory/wasmExtraction.ts";
 import {petalCountLoggerInit} from "@/petalCountLogger.ts";
+import Api from "@/Api.vue";
 const { t } = useI18n();
 
 const webSocketServerAddress = import.meta.env.VITE_SERVER;
@@ -61,6 +62,7 @@ onMounted(() => {
 notice(t("notice.loaded"));
 </script>
 <template>
+  <Api/>
   <MouseNoEffect>
     <InfoHud :webSocketService="webSocketService"/>
   </MouseNoEffect>
