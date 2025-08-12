@@ -136,7 +136,8 @@ function format(num: number) {
   position: absolute;
   content: attr(data-content);
   color: transparent;
-  -webkit-text-stroke: 1.5px black;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.1em black;
   z-index: -1;
 }
 .tag.one {
