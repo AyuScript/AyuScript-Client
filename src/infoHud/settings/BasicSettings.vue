@@ -11,10 +11,10 @@ function copyInventory() {
   showInventory.value = false;
   setTimeout(() => {
     showInventory.value = true;
-  }, 500);
-  setTimeout(() => {
-    eventBus.emit('copyInventory');
-  }, 10000);
+    setTimeout(() => {
+      eventBus.emit('copyInventory');
+    }, 0);
+  }, 0);
 }
 </script>
 

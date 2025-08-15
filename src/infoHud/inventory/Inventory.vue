@@ -61,7 +61,7 @@ function format(num: number) {
 
 <template>
   <div class="inventoryBox">
-    <h1 class="title" :data-content="`Inventory of ${getPlayerName()}`">
+    <h1 class="title">
       Inventory of {{getPlayerName()}}
     </h1>
     <div class="container">
@@ -70,10 +70,10 @@ function format(num: number) {
         <img v-if="item.rarity > 0 && item.subCount > 0"
              class="image"
              :src="getImageUrl(item.petalId, item.rarity - 1)"/>
-        <span v-if="item.count > 0" class="tag one" :data-content="`x${format(item.count)}`">
+        <span v-if="item.count > 0" class="tag one">
           x{{format(item.count)}}
         </span>
-        <span v-if="item.subCount > 0" class="tag two" :data-content="`x${format(item.subCount)}`">
+        <span v-if="item.subCount > 0" class="tag two">
           x{{format(item.subCount)}}
         </span>
       </div>
@@ -101,13 +101,8 @@ function format(num: number) {
   z-index: 1;
   margin-left: 50px;
   margin-right: 50px;
-}
-.title::before {
-  position: absolute;
-  content: attr(data-content);
-  color: transparent;
-  -webkit-text-stroke: 2.5px black;
-  z-index: -1;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.1em black;
 }
 .container {
   display: flex;
@@ -131,14 +126,8 @@ function format(num: number) {
   color: white;
   rotate: 20deg;
   font-size: 12px;
-}
-.tag::before {
-  position: absolute;
-  content: attr(data-content);
-  color: transparent;
   paint-order: stroke fill;
   -webkit-text-stroke: 0.1em black;
-  z-index: -1;
 }
 .tag.one {
   left: 35px;
@@ -154,12 +143,7 @@ function format(num: number) {
   z-index: 1;
   margin-right: 3px;
   margin-bottom: 3px;
-}
-.hint::before {
-  position: absolute;
-  content: "Generated with AyuScript";
-  color: transparent;
-  -webkit-text-stroke: 1.25px black;
-  z-index: -1;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.1em black;
 }
 </style>
