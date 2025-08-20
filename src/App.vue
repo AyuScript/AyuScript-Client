@@ -13,6 +13,7 @@ import NoneEncryptor from "@/encryption/none.ts";
 import {injectAPI} from "@/memory/wasmExtraction.ts";
 import {petalCountLoggerInit} from "@/petalCountLogger.ts";
 import Api from "@/Api.vue";
+import '@/commands/builtin';
 const { t } = useI18n();
 
 const webSocketServerAddress = import.meta.env.VITE_SERVER;

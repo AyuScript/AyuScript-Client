@@ -251,6 +251,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@jsprismarine/brigadier@^0.13.1":
+  version "0.13.1"
+  resolved "https://registry.npmmirror.com/@jsprismarine/brigadier/-/brigadier-0.13.1.tgz#7faddc61c3ff1998569363b2fac03d43916a30cc"
+  integrity sha512-FbLXI4aoXU73nO9q/iSfLA4ipq6dnuw6Zl/b5/QbizwIhU96bZqNNI4HcNsm111MWfxt0qp1w5dmooLnWpNIAg==
+
 "@rollup/rollup-android-arm-eabi@4.44.2":
   version "4.44.2"
   resolved "https://registry.npmmirror.com/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.44.2.tgz#6819b7f1e41a49af566f629a1556eaeea774d043"
