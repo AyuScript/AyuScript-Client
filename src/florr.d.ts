@@ -15,6 +15,7 @@ type ModuleType = {
   HEAPU32: Uint32Array;
   HEAPF32: Float32Array;
   HEAPF64: Float64Array;
+  _malloc: (number) => number;
 } | {
   HEAP8: undefined;
   HEAP16: undefined;

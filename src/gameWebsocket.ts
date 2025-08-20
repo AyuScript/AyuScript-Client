@@ -9,18 +9,13 @@ const nativeWebSocket = WebSocket;
 export function patchWebsocket(){
   window.WebSocket = function(...args: ConstructorParameters<typeof WebSocket>) {
     const url = args[0] as string;
-
     const isGameServer = gameWSSPatterns.some(pattern => pattern.test(url));
 
-
     if (isGameServer) {
-      console.log('Allowing connection to game server:', url);
       const socket = new nativeWebSocket(...args);
       wsURL = socket.url;
       return socket;
     } else {
-
-      console.log('Allowing connection to:', url);
       const socket = new nativeWebSocket(...args);
       wsURL = socket.url;
       return socket;
