@@ -62,7 +62,11 @@ onMounted(() => {
     webSocketService.connect();
   });
 });
-notice(t("notice.loaded"));
+if (window.electron) {
+  notice(t("notice.loaded.client"));
+} else {
+  notice(t("notice.loaded.browser"));
+}
 </script>
 <template>
   <Api/>

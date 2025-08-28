@@ -11,6 +11,8 @@ declare global {
   export interface Window {
     ayuScriptApi: AyuScriptAPI;
 
+    electron: true | undefined;
+
     florrio: Florrio;
     Module: ModuleType;
     cp6: Cp6;
