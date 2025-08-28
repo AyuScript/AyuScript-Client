@@ -14,6 +14,7 @@ import {injectAPI} from "@/memory/wasmExtraction.ts";
 import {petalCountLoggerInit} from "@/petalCountLogger.ts";
 import Api from "@/Api.vue";
 import '@/commands/builtin';
+import {gameChatUtilityInit} from "@/gameChat/gameChatUtility.ts";
 const { t } = useI18n();
 
 const webSocketServerAddress = import.meta.env.VITE_SERVER;
@@ -23,8 +24,9 @@ switch (import.meta.env.VITE_ENCRYPTION) {
     webSocketService.applyEncryptor(new NoneEncryptor());
     break;
 }
-injectAPI().then(({ inventory }) => {
+injectAPI().then(({ inventory, chatBase, chatOverflow }) => {
   petalCountLoggerInit(inventory);
+  gameChatUtilityInit(chatBase, chatOverflow);
 });
 patchWebsocket();
 webSocketService.subscribeOpen(() => {

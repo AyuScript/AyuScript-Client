@@ -2,7 +2,7 @@ import {CommandDispatcher} from "@jsprismarine/brigadier";
 
 export const dispatcher = new CommandDispatcher();
 
-document.addEventListener("keydown", (e) => {
+document.addEventListener("keydown", async (e) => {
   if (e.key !== "Enter") {
     return;
   }
@@ -17,13 +17,16 @@ document.addEventListener("keydown", (e) => {
   }
 
   const value = target.value.trim();
-  console.log(value);
   if (!value.startsWith("/")) {
     return;
   }
 
   if (dispatcher.parse(value.slice(1), null)) {
-    dispatcher.execute(dispatcher.parse(value.slice(1), null));
-    target.value = "";
+    const result = await (dispatcher.execute(dispatcher.parse(value.slice(1), null))[0]);
+    if (typeof result === 'string') {
+      target.value = result;
+    } else {
+      target.value = '';
+    }
   }
 }, true);

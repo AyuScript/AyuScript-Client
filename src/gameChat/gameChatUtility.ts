@@ -1,7 +1,5 @@
-// TODO refactor this file
-// TODO find these two value in wasm
-const base = 19286288;
-const overflow = 3563868;
+let base!:number;
+let overflow!:number;
 
 function writeString(str: string) {
   if (!window.Module.HEAPU8) {
@@ -94,4 +92,9 @@ export function addChatMessage(segments: {text: string, r: number, g: number, b:
   }
 
   window.Module.HEAP32[(base - 8) / 4] = count + 1;
+}
+
+export function gameChatUtilityInit(chatBase: number, chatOverflow: number) {
+  base = chatBase;
+  overflow = chatOverflow;
 }
