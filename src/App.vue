@@ -15,6 +15,7 @@ import {petalCountLoggerInit} from "@/petalCountLogger.ts";
 import Api from "@/Api.vue";
 import '@/commands/builtin';
 import {gameChatUtilityInit} from "@/gameChat/gameChatUtility.ts";
+import XorEncryptor from "@/encryption/xor.ts";
 const { t } = useI18n();
 
 const webSocketServerAddress = import.meta.env.VITE_SERVER;
@@ -22,6 +23,9 @@ const webSocketService = new WebSocketService(webSocketServerAddress);
 switch (import.meta.env.VITE_ENCRYPTION) {
   case 'none':
     webSocketService.applyEncryptor(new NoneEncryptor());
+    break;
+  case 'xor':
+    webSocketService.applyEncryptor(new XorEncryptor(import.meta.env.VITE_ENCRYPTION_KEY));
     break;
 }
 injectAPI().then(({ inventory, chatBase, chatOverflow }) => {
