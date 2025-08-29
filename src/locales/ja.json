@@ -1,6 +1,9 @@
 {
   "notice": {
-    "loaded": "AyuScript loaded.",
+    "loaded": {
+      "browser": "AyuScript (addon version) loaded",
+      "client": "AyuScript (client version) loaded"
+    },
     "newVersion": "New version {version} published!",
     "copy": "Copied to clipboard."
   },

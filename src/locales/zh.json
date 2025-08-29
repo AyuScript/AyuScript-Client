@@ -1,6 +1,9 @@
 {
   "notice": {
-    "loaded": "AyuScript已加载。",
+    "loaded": {
+      "browser": "AyuScript (addon version) loaded",
+      "client": "AyuScript (client version) loaded"
+    },
     "newVersion": "新版本 {version} 已发布！",
     "copy": "已复制到剪贴板"
   },
