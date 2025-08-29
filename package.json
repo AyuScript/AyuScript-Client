@@ -8,15 +8,21 @@
     "proto:generate": "protoc --ts_proto_out=./src ./proto/*.proto --ts_proto_opt=esModuleInterop=true",
     "proto:watch": "chokidar \"**/*.proto\" -c \"npm run proto:generate\"",
     "electron:start": "cross-env NODE_ENV=development electron .",
-    "electron:build": "npm run build && electron-builder",
+    "electron:build": "npm run build && cp dist/ayuscript.user.js electron/ && electron-builder",
+    "electron:build:windows": "electron-builder -w",
+    "electron:build:mac": "electron-builder -m",
+    "electron:build:linux": "electron-builder -l",
     "dev": "vite",
     "build": "vite build",
     "preview": "vue-tsc -b && vite preview"
   },
   "dependencies": {
     "@jsprismarine/brigadier": "^0.13.1",
+    "binaryen": "^123.0.0",
     "dom-to-image": "^2.6.0",
+    "express": "^5.1.0",
     "mitt": "^3.0.1",
+    "serve-index": "^1.9.1",
     "ts-proto": "^2.7.7",
     "vue": "^3.5.20",
     "vue-i18n": "^11.1.11"
