@@ -30,11 +30,11 @@ export function addChatMessage(segments: {text: string, r: number, g: number, b:
   if (!window.Module.HEAPU8) {
     return;
   }
-  let count = window.Module.HEAP32[(base - 8) / 4];
+  let count = window.Module.HEAP32[(base - 8) / 4]!;
   if (count >= 100) {
     for (let i = 0; i < 99; i++) {
       for (let j = 0; j < 408; j++) {
-        window.Module.HEAP8[base + 408 * i + j] = window.Module.HEAP8[base + 408 * (i + 1) + j];
+        window.Module.HEAP8[base + 408 * i + j] = window.Module.HEAP8[base + 408 * (i + 1) + j]!;
       }
     }
     count = 99;
@@ -65,7 +65,7 @@ export function addChatMessage(segments: {text: string, r: number, g: number, b:
   window.Module.HEAP32[(var1 + 8) / 4] = segBase;
 
   for (let s = 0; s < segCount; s++) {
-    const {text, r = 255, g = 255, b = 255} = segments[s];
+    const {text, r = 255, g = 255, b = 255} = segments[s]!;
     const var0 = segBase + s * 48;
 
     window.Module.HEAPF32[var0 / 4] = canvasTextWidth(text);
