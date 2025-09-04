@@ -114,6 +114,7 @@ function createWindow() {
             const originalInstantiate = WebAssembly.instantiate;
             WebAssembly.instantiate = async function(buffer, imports = {}) {
               const wasmFunctionNames = ${JSON.stringify(funcNames)};
+              window.ayuHooks.functions = wasmFunctionNames;
         
               if (!imports.hooks) imports.hooks = {};
         
@@ -124,7 +125,7 @@ function createWindow() {
                 if (!imports.hooks[preName]) {
                   imports.hooks[preName] = (...args) => {
                     // console.log('Calling hook:', preName, 'with args:', args);
-                    return window.ayuHooks?.[preName]?.(...args) ? 1 : 1;
+                    return window.ayuHooks?.[preName]?.(...args) ? 0 : 1;
                   };
                 }
         
