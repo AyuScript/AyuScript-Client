@@ -2,7 +2,7 @@ import type {Petal, Utils} from "./florr";
 import {ref} from "vue";
 
 export type Summary = Partial<Record<number, number>>;
-export type Detail = Partial<Record<number, Record<string, number>>>;
+export type Detail = Record<number, Record<string, number>>;
 let florrioUtils!: Utils;
 let petals!: Petal[];
 let petalSids!: number[];
