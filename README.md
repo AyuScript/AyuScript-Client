@@ -21,3 +21,7 @@ You should install our script from [official website](https://ayuscript.cc/) to 
 - Create a `.env.production` file, with the same format as `.env.development`
 - Run `yarn run proto:generate` to compile the protocol buffers.
 - Run `yarn run build` to build the script.
+
+## License
+This project is licensed under the AGPL-3.0 License.
+Specially, the license of `electron/` is MIT License.
