@@ -23,8 +23,8 @@ function createWindow() {
   const fileServer = express();
   fileServer.use('/', express.static(__dirname), serveIndex(__dirname));
 
-  const PORT = 61699;
-  fileServer.listen(PORT, () => {
+  const PORT = 3000;
+  fileServer.listen(PORT, '127.0.0.1', () => {
     console.log(`File server running at http://localhost:${PORT}`);
   });
 
@@ -330,7 +330,7 @@ function createWindow() {
 
           const outPath = path.resolve(__dirname, 'out.wasm');
           fs.writeFile(outPath, newBinary, (err) => {
-            callback({ redirectURL: `http://localhost:61699/out.wasm` });
+            callback({ redirectURL: `http://localhost:3000/out.wasm` });
           });
         } catch (err) {
           console.error('WASM patch error', err);
