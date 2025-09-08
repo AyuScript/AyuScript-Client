@@ -54,8 +54,33 @@ function createWindow() {
             newModule.addFunctionImport(postName, "hooks", postName, retType, retType);
           }
 
-          const funcNames = [];
+          const funcNames = {};
 
+          let main = '';
+          let malloc = '';
+
+          for (let i = 0; i < module.getNumExports(); i++) {
+            const exp = Binaryen.getExportInfo(module.getExportByIndex(i));
+            if (exp.name === "kg") {
+              main = exp.value;
+            }
+            if (exp.name === "Of") {
+              malloc = exp.value;
+            }
+          }
+
+          for (let i = 0; i < module.getNumFunctions(); i++) {
+            const funcInfo = Binaryen.getFunctionInfo(module.getFunctionByIndex(i));
+            const origName = funcInfo.name;
+
+            if (origName.includes("import")) {
+              continue;
+            }
+
+            funcNames[i] = origName;
+          }
+
+          newModule.addGlobal("ayuMap", Binaryen.i32, true, newModule.i32.const(0));
           for (let i = 0; i < module.getNumFunctions(); i++) {
             const funcInfo = Binaryen.getFunctionInfo(module.getFunctionByIndex(i));
             const origName = funcInfo.name;
@@ -65,8 +90,6 @@ function createWindow() {
             if (origName.includes("import")) {
               continue;
             }
-
-            funcNames.push(origName);
 
             addJSHooks(origName, paramTypes, retType);
 
@@ -90,24 +113,182 @@ function createWindow() {
                 defaultValue = newModule.f64.const(0);
                 break;
             }
-            const wrapperBody = newModule.block(null, retType === Binaryen.none ? [
-              newModule.if(
-                newModule.call(`pre_${origName}`, params, Binaryen.i32),
-                newModule.call(origFuncNewName, params, retType)
-              ),
-              newModule.call(`post_${origName}`, [], retType)
-            ] : [
-              newModule.call(`post_${origName}`, [
+            if (origName === main) {
+              const wrapperBody = newModule.block(null, retType === Binaryen.none ? [
+                newModule.global.set("ayuMap", newModule.call(malloc, [newModule.i32.const(Object.keys(funcNames).length)], Binaryen.i32)),
                 newModule.if(
-                  newModule.call(`pre_${origName}`, params, Binaryen.i32),
-                  newModule.call(origFuncNewName, params, retType),
-                  defaultValue
-                )], retType)
-            ], retType);
+                  newModule.i32.and(
+                    newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                    newModule.i32.const(1)
+                  ),
+                  newModule.if(
+                    newModule.call(`pre_${origName}`, params, Binaryen.i32),
+                    newModule.call(origFuncNewName, params, retType)
+                  ),
+                  newModule.call(origFuncNewName, params, retType)
+                ),
+                newModule.if(
+                  newModule.i32.and(
+                    newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                    newModule.i32.const(2)
+                  ),
+                  newModule.call(`post_${origName}`, [], retType),
+                )
+              ] : [
+                newModule.global.set("ayuMap", newModule.call(malloc, [newModule.i32.const(Object.keys(funcNames).length)], Binaryen.i32)),
+                newModule.if(
+                  newModule.i32.and(
+                    newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                    newModule.i32.const(2)
+                  ),
+                  newModule.call(`post_${origName}`, [
+                    newModule.if(
+                      newModule.i32.and(
+                        newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                        newModule.i32.const(1)
+                      ),
+                      newModule.if(
+                        newModule.call(`pre_${origName}`, params, Binaryen.i32),
+                        newModule.call(origFuncNewName, params, retType),
+                        defaultValue
+                      ),
+                      newModule.call(origFuncNewName, params, retType)
+                    ),
+                  ], retType),
+                  newModule.if(
+                    newModule.i32.and(
+                      newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                      newModule.i32.const(1)
+                    ),
+                    newModule.if(
+                      newModule.call(`pre_${origName}`, params, Binaryen.i32),
+                      newModule.call(origFuncNewName, params, retType),
+                      defaultValue
+                    ),
+                    newModule.call(origFuncNewName, params, retType)
+                  )
+                )
+              ], retType);
 
-            newModule.removeFunction(origName);
-            newModule.addFunction(origName, funcInfo.params, funcInfo.results, funcInfo.vars, wrapperBody);
+              newModule.removeFunction(origName);
+              newModule.addFunction(origName, funcInfo.params, funcInfo.results, funcInfo.vars, wrapperBody);
+            } else {
+              const wrapperBody = newModule.block(null, retType === Binaryen.none ? [
+                newModule.if(
+                  newModule.i32.and(
+                    newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                    newModule.i32.const(1)
+                  ),
+                  newModule.if(
+                    newModule.call(`pre_${origName}`, params, Binaryen.i32),
+                    newModule.call(origFuncNewName, params, retType)
+                  ),
+                  newModule.call(origFuncNewName, params, retType)
+                ),
+                newModule.if(
+                  newModule.i32.and(
+                    newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                    newModule.i32.const(2)
+                  ),
+                  newModule.call(`post_${origName}`, [], retType),
+                )
+              ] : [
+                newModule.if(
+                  newModule.i32.and(
+                    newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                    newModule.i32.const(2)
+                  ),
+                  newModule.call(`post_${origName}`, [
+                    newModule.if(
+                      newModule.i32.and(
+                        newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                        newModule.i32.const(1)
+                      ),
+                      newModule.if(
+                        newModule.call(`pre_${origName}`, params, Binaryen.i32),
+                        newModule.call(origFuncNewName, params, retType),
+                        defaultValue
+                      ),
+                      newModule.call(origFuncNewName, params, retType)
+                    ),
+                  ], retType),
+                  newModule.if(
+                    newModule.i32.and(
+                      newModule.i32.load8_u(i, 0, newModule.global.get("ayuMap", Binaryen.i32)),
+                      newModule.i32.const(1)
+                    ),
+                    newModule.if(
+                      newModule.call(`pre_${origName}`, params, Binaryen.i32),
+                      newModule.call(origFuncNewName, params, retType),
+                      defaultValue
+                    ),
+                    newModule.call(origFuncNewName, params, retType)
+                  )
+                )
+              ], retType);
+
+              newModule.removeFunction(origName);
+              newModule.addFunction(origName, funcInfo.params, funcInfo.results, funcInfo.vars, wrapperBody);
+            }
           }
+
+          newModule.addFunction("registerHookPre", Binaryen.i32, Binaryen.none, [Binaryen.i32],
+            newModule.block(null, [
+              newModule.i32.store8(0, 0,
+                newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32)),
+                newModule.i32.or(
+                  newModule.i32.load8_u(0, 0,
+                    newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32))
+                  ),
+                  newModule.i32.const(1)
+                )
+              )
+            ])
+          );
+          newModule.addFunctionExport("registerHookPre", "registerHookPre");
+          newModule.addFunction("registerHookPost", Binaryen.i32, Binaryen.none, [Binaryen.i32],
+            newModule.block(null, [
+              newModule.i32.store8(0, 0,
+                newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32)),
+                newModule.i32.or(
+                  newModule.i32.load8_u(0, 0,
+                    newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32))
+                  ),
+                  newModule.i32.const(2)
+                )
+              )
+            ])
+          );
+          newModule.addFunctionExport("registerHookPost", "registerHookPost");
+          newModule.addFunction("unregisterHookPre", Binaryen.i32, Binaryen.none, [Binaryen.i32],
+            newModule.block(null, [
+              newModule.i32.store8(0, 0,
+                newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32)),
+                newModule.i32.and(
+                  newModule.i32.load8_u(0, 0,
+                    newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32))
+                  ),
+                  newModule.i32.const(254)
+                )
+              )
+            ])
+          );
+          newModule.addFunctionExport("unregisterHookPre", "unregisterHookPre");
+          newModule.addFunction("unregisterHookPost", Binaryen.i32, Binaryen.none, [Binaryen.i32],
+            newModule.block(null, [
+              newModule.i32.store8(0, 0,
+                newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32)),
+                newModule.i32.and(
+                  newModule.i32.load8_u(0, 0,
+                    newModule.i32.add(newModule.global.get("ayuMap", Binaryen.i32), newModule.local.get(0, Binaryen.i32))
+                  ),
+                  newModule.i32.const(253)
+                )
+              )
+            ])
+          );
+          newModule.addFunctionExport("unregisterHookPost", "unregisterHookPost");
+
           win.webContents.executeJavaScript(`
             window.ayuHooks = window.ayuHooks || {};
         
@@ -118,7 +299,7 @@ function createWindow() {
         
               if (!imports.hooks) imports.hooks = {};
         
-              wasmFunctionNames.forEach(name => {
+              Object.values(wasmFunctionNames).forEach(name => {
                 const preName = 'pre_' + name;
                 const postName = 'post_' + name;
         
