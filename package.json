@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@jsprismarine/brigadier": "^0.13.1",
+    "@webassemblyjs/ast": "^1.14.1",
+    "@webassemblyjs/wasm-parser": "^1.14.1",
     "binaryen": "^123.0.0",
     "dom-to-image": "^2.6.0",
     "express": "^5.1.0",

@@ -6,10 +6,13 @@ import Binaryen from "binaryen";
 import * as fs from "node:fs";
 import express from "express";
 import serveIndex from "serve-index";
+import {parseRules} from "./parse.js";
 
 const isDev = process.env.NODE_ENV === 'development';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const rules = JSON.parse(fs.readFileSync(path.join(__dirname, "rules.json"), "utf-8"));
+
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -43,6 +46,13 @@ function createWindow() {
         let buffer = Buffer.concat(chunks);
 
         try {
+          const parsed = parseRules(buffer, rules);
+          const parsedFunctions = {};
+
+          for (let key in parsed) {
+            parsedFunctions[key] = parsed[key].substring(5);
+          }
+
           const module = Binaryen.readBinary(buffer);
 
           const newModule = Binaryen.readBinary(buffer);
@@ -296,20 +306,21 @@ function createWindow() {
             WebAssembly.instantiate = async function(buffer, imports = {}) {
               const wasmFunctionNames = ${JSON.stringify(funcNames)};
               window.ayuHooks.functions = wasmFunctionNames;
-        
+              window.ayuHooks.parsedFunctions = ${JSON.stringify(parsedFunctions)};
+              
               if (!imports.hooks) imports.hooks = {};
-        
+              
               Object.values(wasmFunctionNames).forEach(name => {
                 const preName = 'pre_' + name;
                 const postName = 'post_' + name;
-        
+                
                 if (!imports.hooks[preName]) {
                   imports.hooks[preName] = (...args) => {
                     // console.log('Calling hook:', preName, 'with args:', args);
                     return window.ayuHooks?.[preName]?.(...args) ? 0 : 1;
                   };
                 }
-        
+                
                 if (!imports.hooks[postName]) {
                   imports.hooks[postName] = (ret) => {
                     // console.log('Calling hook:', postName, 'with return value:', ret);
@@ -317,12 +328,11 @@ function createWindow() {
                   };
                 }
               });
-        
+              
               return originalInstantiate.call(this, buffer, imports);
             };
           `);
 
-          // await new Promise(resolve=>fs.writeFile("out.wat", newModule.emitText(), resolve));
           console.log("Validate");
           newModule.validate();
           console.log("Validate pass");
