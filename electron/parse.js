@@ -40,9 +40,6 @@ export function parseRules(wasmBytes, rules) {
   for (let i = 0; i < funcs.length; i++) {
     const type = funcs[i].signature;
     const body = funcs[i].body;
-    if(funcs[i].name.value=="func_2564"){
-      debugger;
-    }
 
     for (const rule of rules) {
       if (
