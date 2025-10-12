@@ -13,5 +13,26 @@
       "u32.load8_u",
       "i32.eqz"
     ]
+  },
+  {
+    "parsedName": "commandHint",
+    "body": [
+      "get_global",
+      "i32.const",
+      "i32.sub",
+      "tee_local",
+      "set_global",
+      "get_local",
+      "u32.load",
+      "set_local",
+      "block",
+      "get_local",
+      "i32.const",
+      "i32.add",
+      "set_global",
+      "get_local",
+      "end"
+    ],
+    "first": true
   }
 ]

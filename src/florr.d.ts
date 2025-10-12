@@ -6,7 +6,7 @@ interface Cp6 {
   simulateContextLoss: () => void;
 }
 
-type ModuleType = {
+type ModuleType = ({
   HEAP8: Int8Array;
   HEAP16: Int16Array;
   HEAP32: Int32Array;
@@ -15,7 +15,6 @@ type ModuleType = {
   HEAPU32: Uint32Array;
   HEAPF32: Float32Array;
   HEAPF64: Float64Array;
-  _malloc: (number) => number;
 } | {
   HEAP8: undefined;
   HEAP16: undefined;
@@ -25,6 +24,16 @@ type ModuleType = {
   HEAPU32: undefined;
   HEAPF32: undefined;
   HEAPF64: undefined;
+}) & {
+  _malloc: (number) => number;
+  asm: {
+    registerHookPre: (number) => void,
+    registerHookPost: (number) => void,
+    unregisterHookPre: (number) => void,
+    unregisterHookPost: (number) => void,
+    [key: string]: Function,
+    [key: number]: Function,
+  }
 }
 
 interface Florrio {

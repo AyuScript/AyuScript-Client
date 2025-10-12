@@ -7,9 +7,14 @@ export interface AyuScriptAPI {
   }
 }
 
+export interface AyuHooks {
+  [key: string]: Function;
+}
+
 declare global {
   export interface Window {
     ayuScriptApi: AyuScriptAPI;
+    ayuHooks: AyuHooks;
 
     electron: true | undefined;
 

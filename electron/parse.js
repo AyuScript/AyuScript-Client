@@ -48,6 +48,9 @@ export function parseRules(wasmBytes, rules) {
       ) {
         if (rule.parsedName) {
           if (matches[rule.parsedName] !== undefined) {
+            if (rule.first) {
+              continue;
+            }
             throw new Error(
               `Rule "${rule.parsedName}" is matching multiple functions: [${matches[rule.parsedName]}, ${funcs[i].name.value}]`
             );

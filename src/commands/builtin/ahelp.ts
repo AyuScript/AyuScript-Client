@@ -1,4 +1,4 @@
-import {dispatcher} from "@/commands/dispatcher.ts";
+import {commandManager, dispatcher} from "@/commands/dispatcher.ts";
 import {literal} from "@jsprismarine/brigadier";
 import {addChatMessage} from "@/gameChat/gameChatUtility.ts";
 
@@ -23,4 +23,6 @@ dispatcher.register(
       ]);
     }
   )
-)
+);
+
+commandManager.registerCommand('ahelp', 'Show help message for AyuScript commands');

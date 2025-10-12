@@ -11,13 +11,23 @@ export function getString(ptr: number) {
   return decoder.decode(stringBytes);
 }
 
+export function writeString(str: string, offset: number) {
+  if (!window.Module.HEAPU8) {
+    return;
+  }
+  const encoder = new TextEncoder();
+  const strBytes = encoder.encode(str);
+  window.Module.HEAPU8.set(strBytes, offset);
+  window.Module.HEAPU8[offset + strBytes.length] = 0;
+}
+
 export function readLeb128(data: Uint8Array, idx: number): { value: number; nextIndex: number } {
   let result = 0, shift = 0, byte;
   do {
     byte   = data[idx++];
-    result |= (byte & 0x7F) << shift;
+    result |= (byte! & 0x7F) << shift;
     shift  += 7;
-  } while (byte & 0x80);
+  } while (byte! & 0x80);
   return { value: result, nextIndex: idx };
 }
 

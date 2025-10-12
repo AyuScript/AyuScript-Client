@@ -19,7 +19,7 @@ function utf8Length(str: string) {
   return utf8.length;
 }
 
-function canvasTextWidth(text: string) {
+export function canvasTextWidth(text: string) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   ctx!.font = '14px Game';
