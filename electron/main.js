@@ -38,7 +38,7 @@ function createWindow() {
     if(!cached) {
       cached = true;
       console.log("Fetched:", details.url);
-
+      const script = await fetch(details.url.substring(0,details.url.length-4) + "js").then(res => res.text());
       const request = net.request(details.url + "?ayuscript");
       let chunks = [];
       request.on('response', (response) => {
@@ -49,12 +49,12 @@ function createWindow() {
           let buffer = Buffer.concat(chunks);
 
           try {
-            const parsed = parseRules(buffer, rules);
-            const parsedFunctions = {};
-
-            for (let key in parsed) {
-              parsedFunctions[key] = parsed[key].substring(5);
-            }
+            // const parsed = parseRules(buffer, rules);
+            // const parsedFunctions = {};
+            //
+            // for (let key in parsed) {
+            //   parsedFunctions[key] = parsed[key].substring(5);
+            // }
 
             const module = Binaryen.readBinary(buffer);
 
@@ -74,10 +74,10 @@ function createWindow() {
 
             for (let i = 0; i < module.getNumExports(); i++) {
               const exp = Binaryen.getExportInfo(module.getExportByIndex(i));
-              if (exp.name === "kg") {
+              if (exp.name === /[a-zA-Z]\._main=[a-zA-Z]\.asm\.([a-zA-Z]{2})/.exec(script)[1]) {
                 main = exp.value;
               }
-              if (exp.name === "Of") {
+              if (exp.name === /[a-zA-Z]\._malloc=[a-zA-Z]\.asm\.([a-zA-Z]{2})/.exec(script)[1]) {
                 malloc = exp.value;
               }
             }
