@@ -6,7 +6,6 @@ import Binaryen from "binaryen";
 import * as fs from "node:fs";
 import express from "express";
 import serveIndex from "serve-index";
-import {parseRules} from "./parse.js";
 
 const isDev = process.env.NODE_ENV === 'development';
 const __filename = fileURLToPath(import.meta.url);
@@ -49,13 +48,6 @@ function createWindow() {
           let buffer = Buffer.concat(chunks);
 
           try {
-            // const parsed = parseRules(buffer, rules);
-            // const parsedFunctions = {};
-            //
-            // for (let key in parsed) {
-            //   parsedFunctions[key] = parsed[key].substring(5);
-            // }
-
             const module = Binaryen.readBinary(buffer);
 
             const newModule = Binaryen.readBinary(buffer);

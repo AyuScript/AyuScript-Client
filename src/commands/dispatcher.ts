@@ -36,10 +36,8 @@ class CommandManager {
         window.Module.HEAPU32[(ptr + 40) / 4] = 2147483728;
         window.Module.HEAPU32[(ptr + 44) / 4] = 0x00f3c4a3; // color
         window.Module.HEAPU32[(ptr + 48) / 4] = 0;
-        window.Module.HEAPU32[(ptr + 52) / 4] = 1039516303;
-
+        window.Module.HEAPF32[(ptr + 52) / 4] = 0.12;
         window.Module.HEAPF32[(ptr + 56) / 4] = 14.00;
-
         window.Module.HEAPU32[(ptr + 60) / 4] = 264;
         window.Module.HEAPU32[(ptr + 64) / 4] = 0;
         writeString(name, desPtr);
