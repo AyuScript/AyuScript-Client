@@ -1,2 +1,2 @@
 import './ahelp.ts';
-import './asquad.ts';
+import './ban.ts';

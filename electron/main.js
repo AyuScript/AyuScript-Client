@@ -302,7 +302,6 @@ function createWindow() {
               WebAssembly.instantiate = async function(buffer, imports = {}) {
                 const wasmFunctionNames = ${JSON.stringify(funcNames)};
                 window.ayuHooks.functions = wasmFunctionNames;
-                window.ayuHooks.parsedFunctions = ${JSON.stringify(parsedFunctions)};
                 
                 if (!imports.hooks) imports.hooks = {};
                 

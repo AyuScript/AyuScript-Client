@@ -67,16 +67,17 @@ if (window.electron) {
     }
 
     let firstPtr = 0;
-    window.Module.asm.registerHookPre(440);
+    window.Module.asm.registerHookPre(439);
 
-    window.ayuHooks.pre_79 = (arg0: number, arg1: number) => {
+    window.ayuHooks.pre_78 = (arg0: number, arg1: number) => {
+      console.log(arg0, arg1);
       if (!firstPtr) {
         firstPtr = arg1;
       }
       if (arg1 == firstPtr) {
-        for (const [, { ptr }] of commandManager.getAllCommands()) {
-          window.Module.asm[79]?.(arg0, ptr);
-        }
+        [...commandManager.getAllCommands().keys()].reverse().forEach(key => {
+          window.Module.asm[78]?.(arg0, commandManager.getAllCommands().get(key)!.ptr);
+        });
       }
     };
   })();
