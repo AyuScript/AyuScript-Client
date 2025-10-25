@@ -9,9 +9,9 @@
     "proto:watch": "chokidar \"**/*.proto\" -c \"npm run proto:generate\"",
     "electron:start": "cross-env NODE_ENV=development electron .",
     "electron:build": "npm run build && cp dist/ayuscript.user.js electron/ && electron-builder",
-    "electron:build:windows": "electron-builder -w",
-    "electron:build:mac": "electron-builder -m",
-    "electron:build:linux": "electron-builder -l",
+    "electron:build:windows": "electron-builder -w --x64",
+    "electron:build:mac": "electron-builder -m --arm64",
+    "electron:build:linux": "electron-builder -l --x64",
     "dev": "vite",
     "build": "vite build",
     "preview": "vue-tsc -b && vite preview"
